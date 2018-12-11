@@ -3,7 +3,11 @@
   "cells": [
     {
       "type": "markdown",
-      "data": "[Learn OpenGL CN](https://learnopengl-cn.github.io)"
+      "data": "[Learn OpenGL CN](https://learnopengl-cn.github.io)\n[OpenGL Wiki](https://www.khronos.org/opengl/wiki/)"
+    },
+    {
+      "type": "markdown",
+      "data": "\n## Buffer Object\n创建 `glGenBuffers`\n删除 `glDeleteBuffers`\n绑定内容 `glBindBuffer`\n"
     }
   ]
 }
