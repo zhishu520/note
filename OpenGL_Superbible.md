@@ -92,6 +92,14 @@ void glLinkProgram(	GLuint program);
 
 // 删除program对象
 void glDeleteProgram(	GLuint program);
+
+// 删除shader对象
+void glDeleteShader(	GLuint shader);
+
+
+// 渲染阶段使用 program 对象
+void glUseProgram(	GLuint program);
+
 ```
 
 ### Vertex Array Object (VAO) 顶点数组对象
@@ -103,9 +111,54 @@ void glDeleteProgram(	GLuint program);
 void glCreateVertexArrays(	GLsizei n,
                             GLuint *arrays);
 
-
 // array : 绑定的句柄
 void glBindVertexArray(	GLuint array);
 
+
+// 和glCreateVertexArrays应该一致的
+void glDeleteVertexArrays(	GLsizei n,
+                            const GLuint *arrays);
+
 ```
+
+### 绘画命令`glDrawArrays`
+
+```cpp
+// 给 OpenGL 管线输送顶点数据
+// mode : 图元类型 GL_POINTS, GL_LINE_STRIP, GL_LINE_LOOP, GL_LINES, GL_LINE_STRIP_ADJACENCY, GL_LINES_ADJACENCY, GL_TRIANGLE_STRIP, GL_TRIANGLE_FAN, GL_TRIANGLES, GL_TRIANGLE_STRIP_ADJACENCY, GL_TRIANGLES_ADJACENCY and GL_PATCHES
+// first : 开始的索引
+// count : 渲染的个数
+void glDrawArrays(	GLenum mode,
+                    GLint first,
+                    GLsizei count);
+
+
+// 设置点的大小, 默认是1
+// size : 光栅的直径
+void glPointSize(	GLfloat size);
+```
+
+### 绘画三角形
+
+```cpp
+
+# version 450 core
+
+void main()
+{
+    const vectices[3] = vec4[3](
+        vec4(0.25, -0.25, 0.5, 1.0f),
+        vec4(-0.25, -0.25, 0.5, 1.0f),
+        vec4(0.25, 0.25, 0.5, 1.0f),
+    );
+
+    gl_Position = vertices[gl_VertexID];
+}
+
+glDrawArrays(GL_TRIANGLES, 0, 3);
+
+```
+
+## 跟着渲染管线走
+
 
