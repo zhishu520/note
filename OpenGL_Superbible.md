@@ -1,7 +1,7 @@
 
 # OpenGLSuperbible 读书笔记
 
-![图片](https://images-cn.ssl-images-amazon.com/images/I/51Rev-eVu2L._SX382_BO1,204,203,200_.jpg)
+![图片](./image/superbible.jpg)
 [购买链接](https://www.amazon.cn/dp/0672337479/ref=sr_1_2?ie=UTF8&qid=1544971390&sr=8-2&keywords=opengl+superbible)
 
 ## 渲染管线概要图
