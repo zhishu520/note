@@ -51,8 +51,7 @@ void main(void)
 fragment shader
 ```cpp
 # version 450 core
-out vec4 color;
-void main(void)
+out vec4 color; void main(void)
 {
     color = vec4(0.0, 0.8, 1.0, 1.0);
 }
@@ -65,12 +64,10 @@ void main(void)
 // shaderType:  GL_COMPUTE_SHADER, GL_VERTEX_SHADER, GL_TESS_CONTROL_SHADER, GL_TESS_EVALUATION_SHADER, GL_GEOMETRY_SHADER, or GL_FRAGMENT_SHADER.
 GLuint glCreateShader(GLenum shaderType);
 
-/*
-shader : glCreateShader 返回的句柄
-count : string 数组的size
-string : string数组
-length : string 的长度, 如果为NULL, 要求string以NULL结尾
-*/
+// shader : glCreateShader 返回的句柄
+// count : string 数组的size
+// string : string数组
+// length : string 的长度, 如果为NULL, 要求string以NULL结尾
 
 void glShaderSource(	GLuint shader,
                         GLsizei count,
