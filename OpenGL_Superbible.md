@@ -62,19 +62,50 @@ out vec4 color; void main(void)
 ```cpp
 
 // shaderType:  GL_COMPUTE_SHADER, GL_VERTEX_SHADER, GL_TESS_CONTROL_SHADER, GL_TESS_EVALUATION_SHADER, GL_GEOMETRY_SHADER, or GL_FRAGMENT_SHADER.
+// 创建一个shader对象
 GLuint glCreateShader(GLenum shaderType);
 
 // shader : glCreateShader 返回的句柄
 // count : string 数组的size
 // string : string数组
 // length : string 的长度, 如果为NULL, 要求string以NULL结尾
-
+// 取代shader对象里的代码
 void glShaderSource(	GLuint shader,
                         GLsizei count,
                         const GLchar **string,
                         const GLint *length);
 
+// shader : glCreateShader 返回的句柄
+void glCompileShader(	GLuint shader);
+
+// 创建空的program, shader可以attach
+GLuint glCreateProgram(	void);
+
+// program : glCreateProgram 返回的句柄
+// shader : glCreateShader 返回的句柄
+// 附加shader对象到program对象上
+void glAttachShader(	GLuint program,
+                        GLuint shader);
+
+// 链接program对象
+void glLinkProgram(	GLuint program);
+
+// 删除program对象
+void glDeleteProgram(	GLuint program);
 ```
 
+### Vertex Array Object (VAO) 顶点数组对象
 
+```cpp
+
+// n : 数组的大小
+// arrays : 要绑定的句柄的指针
+void glCreateVertexArrays(	GLsizei n,
+                            GLuint *arrays);
+
+
+// array : 绑定的句柄
+void glBindVertexArray(	GLuint array);
+
+```
 

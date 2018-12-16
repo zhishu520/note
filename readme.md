@@ -1,5 +1,5 @@
 
 ## 读书笔记
 
-[OpenGl Superbible](OpenGL_Superbible.md)
+[OpenGl Superbible 读书笔记](OpenGL_Superbible.md)
 
