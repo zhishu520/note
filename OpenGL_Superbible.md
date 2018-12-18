@@ -143,9 +143,7 @@ void glPointSize(	GLfloat size);
 ```
 
 ### 绘画三角形
-
 ```cpp
-
 # version 450 core
 
 void main()
@@ -164,5 +162,15 @@ glDrawArrays(GL_TRIANGLES, 0, 3);
 ```
 
 ## 跟着渲染管线走
+
+### 传递数据给顶点着色器
+顶点着色器是OpenGL渲染管线第一个可编程阶段，可编程阶段和其他强制阶段是有区别的
+在顶点着色器运行之前，一个可修改函数阶段叫做 vertex fetching 有时候也叫 vertex pulling，他们自动提供了顶点着色器的输入
+
+### 顶点属性
+
+在GLSL中，着色器输入输出数据是通过`in`和`out`限定符存储的
+
+
 
 
