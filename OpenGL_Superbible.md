@@ -171,19 +171,66 @@ glDrawArrays(GL_TRIANGLES, 0, 3);
 顶点着色器是OpenGL渲染管线第一个可编程阶段，可编程阶段和其他强制阶段是有区别的
 在顶点着色器运行之前，一个可修改函数阶段叫做 vertex fetching 有时候也叫 vertex pulling，他们自动提供了顶点着色器的输入
 
-### 顶点属性(vertex attribute)
+#### 顶点属性(vertex attribute)
 在GLSL中，着色器输入输出数据是通过`in`和`out`限定符存储的
 
 ```
 layout (location = 0) in vec4 offset
 ```
+glVertexAttrib*() 更新 vertex attribute 输入到顶点染色器
+
+```cpp
+// index 对应location
+// v 参数
+void glVertexAttrib4fv(	GLuint index,
+ 	                    const GLfloat *v);
+```
+```cpp
+
+GLfloat attrib[] = { 
+    (float) sin(currentTime) * 0.5f,
+    (float) cos(currentTime) * 0.6f,
+    0.0f,
+    0.0f };
+
+glVertexAttrib4fv(0, attrb);
+```
+
+### shader之前传递数据
+用out关键字创建输出变量，会被送到下一个阶段用in关键字声明同名字的变量
+
+#### interface block(接口块？？)
+
+匹配interface block是通过block名字匹配的，但是允许block实例在不同的阶段拥有不同的名字有两个目的
+一是避免疑惑的变量命名，二是可能在不同的阶段从单项变长数组
+```cpp
+
+layout (location 0) in vec4 color;
+
+out VS_OUT{
+    vec4 color;
+} vs_out;
 
 
+void main()
+{
+    vs_out.color = color;
+}
 
+```
 
+```cpp
 
+in VS_OUT{
+    vec4 color;
+} fs_in;
 
+void main()
+{
+    color = fs_in.color;
+}
 
+```
 
 
 
