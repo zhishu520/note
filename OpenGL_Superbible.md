@@ -232,6 +232,67 @@ void main()
 
 ```
 
+### 细分曲面(镶嵌化处理技术)
+[百度百科](https://baike.baidu.com/item/%E6%9B%B2%E9%9D%A2%E7%BB%86%E5%88%86/4965377)
+
+细分曲面是一个打破高级基本元素成很多细小的简单的元素（例如三角形）的渲染过程
+OpenGL 包括一个可修改的函数，可配置的细分曲面引擎。他可以打破四边形，三角形和线条，打破成大量的小的点，线条或者三角形。这些元素可以被渲染管线下的正常光栅化设备直接消耗
+细分曲面位于OpenGL顶点着色器阶段之后, 它由三部分组成：
+
+- 细分曲面控制着色器
+- the fixed-function tessellation engine
+- the tessellation evaluation shader
+
+#### 细分曲面控制着色器 (TCS)
+有时候也叫控制着色器, 这个着色器从顶点着色器获取输入，主要负责两件事：
+- 检测被送到细分曲面引擎的细分曲面等级  
+- 产生要被送到细分曲面之后的细分曲面评价着色器数据
+
+细分曲面的工作方式是通过打碎高级平面(patchs),打碎成点线或者三角形, 每个patch是通过一定数量的控制点形成的。 这个数量可以通过`glPatchParameteri()`,设置参数`pname`为`GL_PATCH_VERTICES`, `value` 设置成控制点的数量。
+
+```cpp
+// pname: GL_PATCH_VERTICES, GL_PATCH_DEFAULT_OUTER_LEVEL, GL_PATCH_DEFAULT_INNER_LEVEL 
+// value: 参数的值
+void glPatchParameteri(	GLenum pname,
+ 	GLint value);
+```
+
+每个patch默认的控制点是3，最大控制点数量由实现定义，但保证至少为32。
+
+当曲面细分被激活的时候, 顶点着色器在每个控制点运行一次，而曲面细分着色器在一组相同数量的顶点控制点运行。也就是说顶点被用作控制点，并且顶点着色器的结果被成批的传递给曲面细分着色器作为输入。每个碎片的控制点数目可以改变使得曲面细分着色器输出的控制点数目可以与它消耗的控制点数目不同。控制着色器生产的控制点的数量由out layout限定符设置。
+```cpp
+layout (vertices = N) out;
+```
+这里，N是每个碎片的控制点的数量，控制着色器是负责计算 控制点的输出 和 设置结果碎片的曲面细分因子，该因子会被送到固定函数细分曲面引擎。细分曲面因子被写成`gl_TessLevelInner` 和 `gl_TessLevelOuter`内置的输出变量，然而其他数据传递下去，一般用户定义的输出变量（使用`out`关键字，或者专用的内置`gl_out`数组）写。
+
+```cpp
+#version 450 core
+layout (vertices = 3) out; // 输出控制点的数量
+void main(void)
+{
+    // 细分曲面等级设置成5.0
+    // 数值越高，会产生越密集的细分曲面输出
+    // 数值越低，会产生越粗糙的细分曲面输出
+    // 数值为0，patch会被丢掉
+    if(gl_InvocationID == 0){
+        gl_TessLevelInner[0] = 5.0;
+        gl_TessLevelOuter[0] = 5.0;
+        gl_TessLevelOuter[1] = 5.0;
+        gl_TessLevelOuter[2] = 5.0;
+    }
+    
+    // gl_InvocationID是 gl_in 和 gl_out 数组的 index
+    // 值是0 到 当前调用的细分曲面控制着色器的patch的控制点的数量
+    gl_out[gl_InvocationID].gl_Position = gl_in[gl_InvocationID].gl_position;
+}
+```
+
+
+
+
+
+
+
 
 
 
