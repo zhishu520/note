@@ -286,6 +286,60 @@ void main(void)
     gl_out[gl_InvocationID].gl_Position = gl_in[gl_InvocationID].gl_position;
 }
 ```
+#### 细分曲面引擎
+细分曲面引擎是OpenGL渲染管线的一个固定函数，它把很多碎片表示的高级曲面打碎成简单的元素，例如点线三角形。在细分曲面引擎接收到碎片之前，细分曲面控制着色器处理将要到来的控制点，和设置用于打破碎片的细分曲面因子。在曲面细分引擎产生输出的元素之后，代表他们的顶点会被细分曲面评价着色器拾起，细分曲面引擎主要负责生产提供给细分曲面评价着色器的参数。
+
+#### 细分曲面评价着色器（TES）
+当固定函数细分曲面引擎运行的时候，它产生一些表示元素已经生成的输出顶点。他们传递给细分曲面评价着色器。细分曲面评价着色器（也叫做评价着色器）运行的时候，每个从细分曲面器生产的顶点都会调用它。当细分曲面等级很高的时候，细分曲面评价着色器会运行大量次数，因此，你需要小心复杂的细分曲面评价着色器和高级的细分曲面等级。
+
+```cpp
+#version 450 core
+// triangles 代表三角形模型
+// equal_spacing 是指相等的距离
+// cw 生成的三角形按顶点按照顺时针顺序
+layout (triangles, equal_spacing, cw) in;
+void main(void)
+{
+    // gl_TestCoord 细分曲面器生成的顶点的质心坐标
+    // gl_in 是 细分曲面控制着色器的写着gl_out的结构体
+    gl_Position =   (gl_TestCoord.x * gl_in[0].gl_Position +
+                     gl_TestCoord.y * gl_in[1].gl_Position +
+                     gl_TestCoord.z * gl_in[2].gl_Position);
+}
+```
+
+```cpp
+// 绘画轮廓
+// face : GL_FRONT_AND_BACK
+// mode : 表示多边形怎么光栅化. 接受的值为GL_POINT, GL_LINE, GL_FILL.
+void glPolygonMode(	GLenum face,
+ 	GLenum mode);
+```
+
+### 几何着色器
+几何着色器逻辑上来说是前端着色器的最后阶段，发生在顶点和细分曲面阶段之后，在光栅化之前。几何着色器针对每个图元运行一次，并且正在处理的图元的所有的顶点数据都有访问权限。几何着色器也是着色器阶段中唯一可以编程控制数据流总量增减的着色器。虽然说细分曲面着色器也可以增减管线的工作量，但是它只通过设置碎片细分曲面的级别来隐式的影响工作量。而几何着色器包含两个函数`EmitVertex()`和`EndPrimitive`他们能显示地产生顶点到图元组装和光栅化。
+几何着色器的另一个独特的功能是他们在渲染管线中途改变变图元模式，例如他们以三角形作为输入，然后产生一些点或者线作为输出。或者以独立点创建三角形。
+
+```cpp
+
+#version 450 core
+layout (triangles) in;
+layout (points, max_vertices=3) out;
+
+// 作用： 转换三角形为顶点。
+void main(void){
+    int i;
+    for( i = 0; i < gl_in.length(); i++)
+    {
+        gl_Position = gl_in[i].gl_Position;
+        EmitVertex(); // 几何着色器的输出中产生一个顶点
+    }
+    // 结束的时候自动调用 EndPrimitive();
+}
+
+```
+
+ 
 
 
 
